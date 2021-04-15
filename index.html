@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html lang="en" >
+<head>
+  <meta charset="UTF-8">
+  <title></title>
+  <link rel="stylesheet" href="style.css">
+  <meta charset="utf-8">
+  <meta http-equiv="x-ua-compatible" content="ie=edge">
+  <meta name="description" content="">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel='stylesheet' href='https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.7/css/bootstrap.min.css'>
+
+
+</head>
+<body>
+<br><br>
+<div class="container">   
+  <main id="app">
+    <router-view></router-view>
+  </main>
+</div>
+
+<template id="product-list" class="list">
+  <div>
+    <div class="actions"id="add_btn">
+      <router-link class="btn btn-default" v-bind:to="{path: '/add-product'}">
+        <span class="glyphicon glyphicon-plus" title="ürün ekle"></span>
+        Ürün Ekle
+      </router-link>
+    </div>
+    <div class="filters row">
+      <div class="form-group col-sm-3">
+        <label for="search-element">Ürünün Adını Giriniz</label>
+        <input v-model="searchKey" class="form-control" id="search-element" title="Ürünü Bulunuz" requred/>
+      </div>
+    </div>
+    <table class="table">
+      <thead>
+      <tr>
+        <th>İsim</th>
+        <th>Açıklama</th>
+        <th>Fiyat</th>
+        <th class="col-sm-2">E / D</th>
+      </tr>
+      </thead>
+      <tbody>
+      <tr v-for="product in filteredProducts">
+        <td>
+          <router-link v-bind:to="{name: 'product', params: {product_id: product.id}}" title="Ürün Adı">{{ product.name }}</router-link>
+        </td>
+        <td title="Açıklama">{{ product.description }}</td>
+        <td title="Fiyatı">
+          {{ product.price }}
+          <span class="glyphicon glyphicon-euro" aria-hidden="true"></span>
+        </td>
+        <td>
+          <router-link class="btn btn-warning btn-xs" v-bind:to="{name: 'product-edit', params: {product_id: product.id}}">Edit</router-link>
+          <router-link class="btn btn-danger btn-xs" v-bind:to="{name: 'product-delete', params: {product_id: product.id}}">Delete</router-link>
+        </td>
+      </tr>
+      </tbody>
+    </table>
+  </div>
+</template>
+
+<template id="add-product">
+  <div>
+    <h2>Yeni ürün ekle</h2>
+    <form v-on:submit="createProduct">
+      <div class="form-group">
+        <label for="add-name">İsim Soyisim</label>
+        <input class="form-control" id="add-name" v-model="product.name" required/>
+      </div>
+      <div class="form-group">
+        <label for="add-description">Açıklama</label>
+        <textarea class="form-control" id="add-description" rows="10" v-model="product.description"></textarea>
+      </div>
+      <div class="form-group">
+        <label for="add-price">Fiyat, <span class="glyphicon glyphicon-euro"></span></label>
+        <input type="number" class="form-control" id="add-price" v-model="product.price"/>
+      </div>
+      <button type="submit" class="btn btn-primary">Oluştur</button>
+      <router-link class="btn btn-default" v-bind:to="'/'">İptal Et</router-link>
+    </form>
+  </div>
+</template>
+
+<template id="product">
+  <div>
+    <h2>{{ product.name }}</h2>
+    <b>Ürün Bilgisi </b>
+    <div>{{ product.description }}</div>
+    <b>Ürün Belirtilen Fiyat Miktarı:</b>
+    <div>{{ product.price }}<span class="glyphicon glyphicon-tl"></span></div>
+    <br/>
+    <span class="glyphicon glyphicon-arrow-left" aria-hidden="true"></span>
+    <router-link v-bind:to="'/'">Ürün Listesine Geri Dön</router-link>
+  </div>
+</template>
+
+<template id="product-edit">
+  <div>
+    <h2>Edit</h2>
+    <form v-on:submit="updateProduct">
+      <div class="form-group">
+        <label for="edit-name">Ürün</label>
+        <input class="form-control" id="edit-name" v-model="product.name" required/>
+      </div>
+      <div class="form-group">
+        <label for="edit-description">Açıklama</label>
+        <textarea class="form-control" id="edit-description" rows="3" v-model="product.description"></textarea>
+      </div>
+      <div class="form-group">
+        <label for="edit-price">Fiayt, <span class="glyphicon glyphicon-euro"></span></label>
+        <input type="number" class="form-control" id="edit-price" v-model="product.price"/>
+      </div>
+      <button type="submit" class="btn btn-primary">Edtle</button>
+      <router-link class="btn btn-default" v-bind:to="'/'">Editlemeyi iptal et</router-link>
+    </form>
+  </div>
+</template>
+
+<template id="product-delete">
+  <div>
+    <h2>Silmek İsteği {{ product.name }}</h2>
+    <form v-on:submit="deleteProduct">
+      <p>Ürünü silmek istiyor musunuz????.</p>
+      <button type="submit" class="btn btn-danger">Evet</button>
+      <router-link class="btn btn-default" v-bind:to="'/'">Hayır</router-link>
+    </form>
+  </div>
+</template>
+
+  <script src='https://cdnjs.cloudflare.com/ajax/libs/vue/2.5.17/vue.min.js'></script>
+<script src='https://cdnjs.cloudflare.com/ajax/libs/vue-router/3.0.1/vue-router.min.js'></script><script  src="script.js"></script>
+
+</body>
+</html>
